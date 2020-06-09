@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+
 import { add, remove } from '../store';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { debounce, isEmpty } from 'lodash';
 
@@ -34,7 +35,6 @@ const Search = ({ addToPlayer }) => {
   });
   const onInputValueChange = (value) => {
     setText(value);
-    console.log(value);
   };
   const executeSearch = debounce(async () => {
     if (isEmpty(text) || text.length < 3) return;
@@ -51,13 +51,28 @@ const Search = ({ addToPlayer }) => {
     axios
       .get(`https://www.balldontlie.io/api/v1/players?search=${text}`)
       .then(async (res) => {
+        const playerinfo = res.data.data;
         setState({ playerinfo: res.data.data });
+        // await getPlayerAvg(playerinfo);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  const getPlayerAvg = (id, playerinfo) => {
+    console.log(id);
+    axios
+      .get(
+        `https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${id}`
+      )
+      .then((res) => {
+        console.log(playerinfo, id);
+        addToPlayer({ playerInfo: playerinfo, playerAvg: res.data.data[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const renderSuggestions = ({
     highlightedIndex,
     selectedItem,
@@ -80,7 +95,10 @@ const Search = ({ addToPlayer }) => {
   };
 
   const onChange = (item) => {
-    addToPlayer(item);
+    console.log(item, item.id);
+    getPlayerAvg(item.id, item);
+    // addToPlayer(item);
+    // addToPlayer(state);
   };
   return (
     <Downshift

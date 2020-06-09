@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-const ShowDetail = () => {
+import PlayerInfo from './PlayerInfo';
+import SeasonAverage from './SeasonAverage';
+import Navbar from './Navbar';
+const ShowDetail = ({ info }) => {
   return (
-    <>
-      <h1>Detail</h1>
-    </>
+    <Container>
+      <div>
+        <Navbar />
+        {/* <PlayerInfo /> */}
+        <SeasonAverage />
+      </div>
+    </Container>
   );
 };
 
-export default ShowDetail;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    info: state,
+  };
+};
+export default connect(mapStateToProps)(ShowDetail);
+
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  margin-top: 150px;
+`;
