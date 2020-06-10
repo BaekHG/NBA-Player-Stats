@@ -9,7 +9,7 @@ const ShowDetail = ({ info }) => {
     <Container>
       <div>
         <Navbar />
-        {/* <PlayerInfo /> */}
+        <PlayerInfo />
         <SeasonAverage />
       </div>
     </Container>
@@ -26,5 +26,5 @@ export default connect(mapStateToProps)(ShowDetail);
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  margin-top: 150px;
+  margin-top: 300px;
 `;

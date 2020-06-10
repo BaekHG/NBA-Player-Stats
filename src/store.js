@@ -7,13 +7,21 @@ const playerInfo = createSlice({
   name: 'PlayerReducer',
   initialState: [],
   reducers: {
-    add: (state, action) => {
+    addPlayer: (state, action) => {
+      console.log(state);
       state.push({ player: action.payload });
     },
-    // remove: (state,action)=>
+    deletePlayer: (state, action) => {
+      return state.filter(
+        (index) => action.payload !== parseInt(index.player.playerInfo.id)
+      );
+    },
+    deleteAllPlayer: () => {
+      return [];
+    },
   },
 });
 const store = configureStore({ reducer: playerInfo.reducer });
-console.log(store.getState());
-export const { add, remove } = playerInfo.actions;
+
+export const { addPlayer, deletePlayer, deleteAllPlayer } = playerInfo.actions;
 export default store;

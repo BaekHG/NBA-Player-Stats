@@ -5,7 +5,15 @@ import ShowDetail from '../components/ShowDetail';
 import { connect } from 'react-redux';
 const Home = ({ PlayerInfo }) => {
   return (
-    <Container>{PlayerInfo.length > 0 ? <ShowDetail /> : <Search />}</Container>
+    <Container>
+      {PlayerInfo.length > 0 ? (
+        <ShowDetail />
+      ) : (
+        <SearchContainer>
+          <Search />
+        </SearchContainer>
+      )}
+    </Container>
   );
 };
 
@@ -13,6 +21,9 @@ const mapPropsToState = (state, ownProps) => {
   return { PlayerInfo: state };
 };
 export default connect(mapPropsToState, null)(Home);
+const SearchContainer = styled.div`
+  width: 700px;
+`;
 const Container = styled.div`
   display: flex;
   align-items: center;

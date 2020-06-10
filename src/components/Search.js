@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { add, remove } from '../store';
+import { addPlayer } from '../store';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -12,10 +12,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
+  containter: {
+    '& input:invalid + fieldset': {
+      borderColor: 'red',
+      borderWidth: 2,
+    },
+  },
   textField: {
     color: '#E2E5E7',
-    width: '700px',
     backgroundColor: 'transparent',
+    borderWidth: '1px',
   },
   paper: {
     position: 'absolute',
@@ -96,9 +102,8 @@ const Search = ({ addToPlayer }) => {
 
   const onChange = (item) => {
     console.log(item, item.id);
+    setText('');
     getPlayerAvg(item.id, item);
-    // addToPlayer(item);
-    // addToPlayer(state);
   };
   return (
     <Downshift
@@ -124,14 +129,11 @@ const Search = ({ addToPlayer }) => {
         >
           <TextField
             fullWidth
-            varient="outlined"
-            className={classes.textField}
-            type="text"
-            value={text}
             InputProps={{
               ...getInputProps(),
               className: classes.textField,
             }}
+            variant="outlined"
             placeholder="SEARCH FOR A PLAYER e.g. Lebron James"
           />
           <div {...getMenuProps()}>
@@ -153,7 +155,7 @@ const Search = ({ addToPlayer }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToPlayer: (state) => dispatch(add(state)),
+    addToPlayer: (state) => dispatch(addPlayer(state)),
   };
 };
 export default connect(null, mapDispatchToProps)(Search);
