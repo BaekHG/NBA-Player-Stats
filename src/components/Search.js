@@ -10,31 +10,57 @@ import Downshift from 'downshift';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-const useStyles = makeStyles({
-  containter: {
-    '& input:invalid + fieldset': {
-      borderColor: 'red',
-      borderWidth: 2,
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+// const useStyles = makeStyles({
+//   container: {
+//     '& input:invalid + fieldset': {
+//       borderColor: 'red',
+//       borderWidth: 2,
+//     },
+//   },
+//   paper: {
+// position: 'absolute',
+// width: '700px',
+// maxHeight: 300,
+// overflow: 'scroll',
+// backgroundColor: '#212121',
+// color: '#E2E5E7',
+//   },
+// });
+
+const CssTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: 'green',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'green',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderWidth: '2px',
+        borderColor: 'green',
+      },
+
+      '&:hover fieldset': {
+        borderColor: 'white',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+      },
+      '& .MuiOutlinedInput-input': {
+        color: 'white',
+        '&::placeholder': {
+          color: 'white',
+          fontWeight: '2px',
+        },
+      },
     },
   },
-  textField: {
-    color: '#E2E5E7',
-    backgroundColor: 'transparent',
-    borderWidth: '1px',
-  },
-  paper: {
-    position: 'absolute',
-    width: '700px',
-    maxHeight: 300,
-    overflow: 'scroll',
-    backgroundColor: '#212121',
-    color: '#E2E5E7',
-  },
-});
+})(TextField);
 
-const Search = ({ addToPlayer }) => {
-  const classes = useStyles();
+const Search = ({ currentState, addToPlayer }) => {
+  // const classes = useStyles();
   const [text, setText] = useState('');
   const [state, setState] = useState({
     playerinfo: [],
@@ -58,8 +84,9 @@ const Search = ({ addToPlayer }) => {
       .get(`https://www.balldontlie.io/api/v1/players?search=${text}`)
       .then(async (res) => {
         const playerinfo = res.data.data;
+
         setState({ playerinfo: res.data.data });
-        // await getPlayerAvg(playerinfo);
+        //
       })
       .catch((err) => {
         console.log(err);
@@ -72,8 +99,48 @@ const Search = ({ addToPlayer }) => {
         `https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${id}`
       )
       .then((res) => {
-        console.log(playerinfo, id);
-        addToPlayer({ playerInfo: playerinfo, playerAvg: res.data.data[0] });
+        // console.log(playerinfo, id);
+
+        const playerAvg = res.data.data[0];
+        if (playerAvg === undefined) {
+          alert(`This Player is eiterh injured or hasn't played yet`);
+          return;
+        }
+        getGameLog(playerinfo, playerAvg, id);
+        // addToPlayer({ playerInfo: playerinfo, playerAvg: res.data.data[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getGameLog = (playerinfo, playerAvg, id) => {
+    axios
+      .get(
+        `https://www.balldontlie.io/api/v1/stats?player_ids[]=${id}&seasons[]=2019&per_page=100`
+      )
+      .then(async (res) => {
+        // const arr = res.data.data.map(data =>{
+        //filetr
+        if (currentState.length >= 1) {
+          const check = currentState.find(
+            (info) => info.player.playerInfo.id === id
+          );
+          if (check !== undefined) {
+            console.log('exist id!!');
+            return;
+          }
+        }
+        const currentTen = res.data.data
+          .sort((a, b) => new Date(b.game.date) - new Date(a.game.date))
+          .slice(0, 10);
+
+        addToPlayer({
+          playerInfo: playerinfo,
+          playerAvg: playerAvg,
+          // playerGameLog: res.data.data,
+          currentTen,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -89,7 +156,7 @@ const Search = ({ addToPlayer }) => {
       <MenuItem
         {...getItemProps({ item: player })}
         key={player.id}
-        selected={highlightedIndex === index}
+        selected={highlightedIndex === index ? 'lightgray' : 'white'}
         component="div"
         style={{
           fontWeight: 400,
@@ -123,22 +190,29 @@ const Search = ({ addToPlayer }) => {
         clearSelection,
         getRootProps,
       }) => (
-        <div
-          className={classes.container}
-          {...getRootProps({}, { suppressRefError: true })}
-        >
-          <TextField
+        <div {...getRootProps({}, { suppressRefError: true })}>
+          <CssTextField
             fullWidth
             InputProps={{
               ...getInputProps(),
-              className: classes.textField,
             }}
             variant="outlined"
             placeholder="SEARCH FOR A PLAYER e.g. Lebron James"
           />
+
           <div {...getMenuProps()}>
             {isOpen && state.playerinfo.length > 0 ? (
-              <Paper className={classes.paper} square>
+              <Paper
+                style={{
+                  position: 'absolute',
+                  width: '700px',
+                  maxHeight: 300,
+                  overflow: 'scroll',
+                  backgroundColor: '#212121',
+                  color: '#E2E5E7',
+                }}
+                square
+              >
                 {renderSuggestions({
                   highlightedIndex,
                   selectedItem,
@@ -152,10 +226,16 @@ const Search = ({ addToPlayer }) => {
     </Downshift>
   );
 };
-
+const mapStatetoProps = (state) => {
+  return {
+    currentState: state,
+  };
+};
 const mapDispatchToProps = (dispatch) => {
   return {
     addToPlayer: (state) => dispatch(addPlayer(state)),
   };
 };
-export default connect(null, mapDispatchToProps)(Search);
+
+const Input = styled.input``;
+export default connect(mapStatetoProps, mapDispatchToProps)(Search);

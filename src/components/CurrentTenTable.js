@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 const fontFamily = '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"';
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -26,56 +29,56 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+    // '&:nth-of-type(odd)': {
+    //   backgroundColor: 'gray',
+    // },
+    '&:hover': {
+      backgroundColor: 'gray',
     },
   },
 }))(TableRow);
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
 function createData(
+  oop,
   min,
-  pts,
+  fgm,
+  fga,
+  fg_pct,
+  fg3m,
+  fg3a,
+  fg3_pct,
+  fta,
+  ft_pct,
+  oreb,
+  dreb,
   reb,
   ast,
   stl,
   blk,
   turnover,
   pf,
-  pg_pct,
-  fg3_pct,
-  ft_pct,
-  fgm,
-  fga,
-  fg3m,
-  fg3a,
-  gtm,
-  fta,
-  oreb,
-  dreb
+  pts
 ) {
   return {
+    oop,
     min,
-    pts,
+    fgm,
+    fga,
+    fg_pct,
+    fg3m,
+    fg3a,
+    fg3_pct,
+    fta,
+    ft_pct,
+    oreb,
+    dreb,
     reb,
     ast,
     stl,
     blk,
     turnover,
     pf,
-    pg_pct,
-    fg3_pct,
-    ft_pct,
-    fgm,
-    fga,
-    fg3m,
-    fg3a,
-    gtm,
-    fta,
-    oreb,
-    dreb,
+    pts,
   };
 }
 
@@ -94,80 +97,80 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables({ playerAvg }) {
+export default function CustomizedTables({ currentTen }) {
   const classes = useStyles();
-  const rows = [
-    createData(
-      playerAvg.min,
-      playerAvg.min,
-      playerAvg.pts,
-      playerAvg.reb,
-      playerAvg.ast,
-      playerAvg.stl,
-      playerAvg.blk,
-      playerAvg.turnover,
-      playerAvg.pf,
-      playerAvg.fg_pct,
-      playerAvg.fg3_pct,
-      playerAvg.ft_pct,
-      playerAvg.fgm,
-      playerAvg.fga,
-      playerAvg.fg3m,
-      playerAvg.fg3a,
-      playerAvg.ftm,
-      playerAvg.fta,
-      playerAvg.oreb,
-      playerAvg.dreb
-    ),
-  ];
+  const rows = currentTen.map((current) => {
+    console.log(moment(current.game.date).format('MM-DD-YYYY'));
+    return createData(
+      moment(current.game.date).format('MM-DD-YYYY'),
+      current.min,
+      current.fgm,
+      current.fga,
+      current.fg_pct,
+      current.fg3m,
+      current.fg3a,
+      current.fg3_pct,
+      current.fta,
+      current.ft_pct,
+      current.oreb,
+      current.dreb,
+      current.reb,
+      current.ast,
+      current.stl,
+      current.blk,
+      current.turnover,
+      current.pf,
+      current.pts
+    );
+  });
   return (
     <TableContainer className={classes.container} component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
+            <StyledTableCell align="center">DATE</StyledTableCell>
             <StyledTableCell align="center">MIN</StyledTableCell>
-            <StyledTableCell align="center">PTS</StyledTableCell>
+            <StyledTableCell align="center">FGM</StyledTableCell>
+            <StyledTableCell align="center">FGA</StyledTableCell>
+            <StyledTableCell align="center">FGPCT</StyledTableCell>
+            <StyledTableCell align="center">FG3M</StyledTableCell>
+            <StyledTableCell align="center">FG3A</StyledTableCell>
+            <StyledTableCell align="center">FG3PCT</StyledTableCell>
+            <StyledTableCell align="center">FTA</StyledTableCell>
+            <StyledTableCell align="center">FTPCT</StyledTableCell>
+            <StyledTableCell align="center">OREB</StyledTableCell>
+            <StyledTableCell align="center">DREB</StyledTableCell>
             <StyledTableCell align="center">REB</StyledTableCell>
             <StyledTableCell align="center">AST</StyledTableCell>
             <StyledTableCell align="center">STL</StyledTableCell>
             <StyledTableCell align="center">BLK</StyledTableCell>
-            <StyledTableCell align="center">TURNOVER</StyledTableCell>
+            <StyledTableCell align="center">TO</StyledTableCell>
             <StyledTableCell align="center">PF</StyledTableCell>
-            <StyledTableCell align="center">FG_PCT</StyledTableCell>
-            <StyledTableCell align="center">FG3_PCT</StyledTableCell>
-            <StyledTableCell align="center">FT_PCT</StyledTableCell>
-            <StyledTableCell align="center">FGM&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">FGA&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">FG3M&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">FG3A&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">FTM</StyledTableCell>
-            <StyledTableCell align="center">FTA&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">OREB&nbsp;</StyledTableCell>
-            <StyledTableCell align="center">DREB&nbsp;</StyledTableCell>
+            <StyledTableCell align="center">PTS</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row.min}>
+              <StyledTableCell align="center">{row.oop}</StyledTableCell>
               <StyledTableCell align="center">{row.min}</StyledTableCell>
-              <StyledTableCell align="center">{row.pts}</StyledTableCell>
+              <StyledTableCell align="center">{row.fgm}</StyledTableCell>
+              <StyledTableCell align="center">{row.fga}</StyledTableCell>
+              <StyledTableCell align="center">{row.fg_pct}</StyledTableCell>
+              <StyledTableCell align="center">{row.fg3m}</StyledTableCell>
+              <StyledTableCell align="center">{row.fg3a}</StyledTableCell>
+              <StyledTableCell align="center">{row.fg3_pct}</StyledTableCell>
+              <StyledTableCell align="center">{row.fta}</StyledTableCell>
+              <StyledTableCell align="center">{row.ft_pct}</StyledTableCell>
+              <StyledTableCell align="center">{row.oreb}</StyledTableCell>
+              <StyledTableCell align="center">{row.dreb}</StyledTableCell>
               <StyledTableCell align="center">{row.reb}</StyledTableCell>
               <StyledTableCell align="center">{row.ast}</StyledTableCell>
               <StyledTableCell align="center">{row.stl}</StyledTableCell>
               <StyledTableCell align="center">{row.blk}</StyledTableCell>
               <StyledTableCell align="center">{row.turnover}</StyledTableCell>
               <StyledTableCell align="center">{row.pf}</StyledTableCell>
-              <StyledTableCell align="center">{row.pg_pct}</StyledTableCell>
-              <StyledTableCell align="center">{row.fg3_pct}</StyledTableCell>
-              <StyledTableCell align="center">{row.ft_pct}</StyledTableCell>
-              <StyledTableCell align="center">{row.fgm}</StyledTableCell>
-              <StyledTableCell align="center">{row.fga}</StyledTableCell>
-              <StyledTableCell align="center">{row.fg3m}</StyledTableCell>
-              <StyledTableCell align="center">{row.fg3a}</StyledTableCell>
-              <StyledTableCell align="center">{row.gtm}</StyledTableCell>
-              <StyledTableCell align="center">{row.fta}</StyledTableCell>
-              <StyledTableCell align="center">{row.oreb}</StyledTableCell>
-              <StyledTableCell align="center">{row.dreb}</StyledTableCell>
+              <StyledTableCell align="center">{row.pts}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

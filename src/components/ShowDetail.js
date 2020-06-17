@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import PlayerInfo from './PlayerInfo';
+import Divider from './Divider';
 import SeasonAverage from './SeasonAverage';
 import Navbar from './Navbar';
+import CurrentGameLog from './CurrentGameLog';
 const ShowDetail = ({ info }) => {
   return (
     <Container>
       <div>
         <Navbar />
-        <PlayerInfo />
+
         <SeasonAverage />
+        <Divider />
+        <CurrentGameLog />
       </div>
     </Container>
   );
@@ -24,6 +27,7 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(ShowDetail);
 
 const Container = styled.div`
+  /* text-align: center; */
   height: 100%;
   width: 100%;
   margin-top: 300px;

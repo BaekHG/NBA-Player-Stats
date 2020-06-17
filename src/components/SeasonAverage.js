@@ -4,17 +4,22 @@ import { connect } from 'react-redux';
 import AvgTable from './AvgTable';
 import styled from 'styled-components';
 import { colors } from './theme';
-// import { queryString } from './utils';
-
-const fontFamily = '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"';
+import PlayerInfo from './PlayerInfo';
+import Modal from '@material-ui/core/Modal';
 const SeasonAverage = ({ info }) => {
-  const {
-    player: { playerInfo },
-  } = info[0];
-  const {
-    player: { playerAvg },
-  } = info[0];
+  const [open, setOpen] = useState({
+    isOpen: false,
+    i: 1,
+  });
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const renderModal = (e) => {
+    const i = e.target.value;
+    setOpen({ isOpen: true, i });
+  };
   const renderAvgStat = () => (
     <div>
       {info.map((player, index) => {
@@ -22,24 +27,30 @@ const SeasonAverage = ({ info }) => {
         return (
           <PlayerAvgContainer>
             <div style={{ paddingBottom: '5px' }}>
-              <h5
+              <button
                 style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  outline: 'none',
                   color,
-                  fontFamily: fontFamily,
-                  fontSize: '24px',
-                  fontWeight: '400',
+                  fontSize: '27px',
+                  fontWeight: '200',
                   lineHeight: '1.33',
                 }}
+                // onClick={()=>renderModal(player.playerInfo)}
+                value={index}
+                onClick={renderModal}
+                // onClick={() => renderModal(index)}
               >
                 {player.player.playerInfo.first_name}{' '}
                 {player.player.playerInfo.last_name}
-              </h5>
+              </button>
+
               <h6
                 style={{
                   color,
-                  fontFamily: fontFamily,
-                  fontSize: '14px',
-                  fontWeight: '400',
+                  fontSize: '17px',
+                  fontWeight: '150',
                   lineHeight: '1.33',
                 }}
               >
@@ -47,18 +58,22 @@ const SeasonAverage = ({ info }) => {
                 {player.player.playerInfo.team.abbreviation}
               </h6>
             </div>
-            <AvgTable playerAvg={player.player.playerAvg} />
+            <Modal open={open.isOpen} onClose={handleClose}>
+              <>
+                <PlayerInfo key={index} index={open.i} player={info} />
+              </>
+            </Modal>
+            <AvgTable key={index} playerAvg={player.player.playerAvg} />
           </PlayerAvgContainer>
         );
       })}
     </div>
   );
-  console.log(playerInfo, playerAvg);
   return (
-    <>
+    <AvgConatiner>
       <H2>'18 - '19 SEASON AVERAGES</H2>
-      <Container>{renderAvgStat()}</Container>
-    </>
+      <PlayerAvgContainer>{renderAvgStat()}</PlayerAvgContainer>
+    </AvgConatiner>
   );
 };
 
@@ -67,13 +82,21 @@ const mapStateToProps = (state) => {
 };
 export default connect(mapStateToProps)(SeasonAverage);
 
+const AvgConatiner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const PlayerAvgContainer = styled.div`
-  padding: 15px 0px;
+  padding: 15px 50px;
+  width: 100%;
 `;
 const H2 = styled.h2`
   color: #e5e8e9;
-  text-align: center;
-  font-family: fontFamily;
+  font-family: '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"';
+  font-weight: 400;
+  font-size: 37px;
 `;
 const Container = styled.div`
   display: flex;

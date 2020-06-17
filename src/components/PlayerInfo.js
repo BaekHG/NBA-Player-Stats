@@ -3,81 +3,79 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
-const PlayerInfo = ({ info }) => {
+const fontFamily = '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"';
+const PlayerInfo = ({ index, player }) => {
   const listStyle = {
     textAlign: 'center',
     color: '#E2E5E7',
     backgroundColor: '#212121',
-    fontFamily: '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"',
+    fontFamily,
   };
+  const playerInfo = player[index].player.playerInfo;
+
   return (
-    <Container>
-      {info.map((p) => (
-        <CardContainer>
-          <Card
+    <CardContainer>
+      <Card
+        style={{
+          position: 'absolute',
+          WebkitTransform: 'translate(-50%,-50%)',
+          transform: 'translate(-50%,-50%)',
+          top: '50%',
+          left: '50%',
+          width: '400',
+          color: '#3d4649',
+          backgroundColor: '#212121',
+          borderRadius: '10px',
+          boxShadow:
+            '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
+        }}
+      >
+        <Card.Img
+          variant="top"
+          src={`https://nba-players.herokuapp.com/players/${playerInfo.last_name}/${playerInfo.first_name}`}
+        />
+        <Card.Body>
+          <Card.Title
             style={{
-              width: '18rem',
-              color: '#E2E5E7',
-              backgroundColor: '#212121',
-              borderRadius: '10px',
-              boxShadow:
-                '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
+              fontFamily,
+              fontSize: '1.5rem',
+              textAlign: 'center',
+              color: 'white',
+              fontWeight: 'bold',
             }}
           >
-            <Card.Img
-              variant="top"
-              src={`https://nba-players.herokuapp.com/players/${p.player.last_name}/${p.player.first_name}`}
-            />
-            <Card.Body>
-              <Card.Title
-                style={{
-                  fontFamily:
-                    '"Rajdhani", "Roboto", "Helvetica", "Arial", "sans-serif"',
-                  fontSize: '1.5rem',
-                  textAlign: 'center',
-                }}
-              >
-                {p.player.first_name} {p.player.last_name}
-              </Card.Title>
-            </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroupItem style={listStyle}>
-                Team : {p.player.team.full_name}
-              </ListGroupItem>
-              <ListGroupItem style={listStyle}>
-                Position : {p.player.position}
-              </ListGroupItem>
-              <ListGroupItem style={listStyle}>
-                Height : {p.player.height_feet}(ft)
-              </ListGroupItem>
-              <ListGroupItem style={listStyle}>
-                Weight : {p.player.weight_pounds}(lb)
-              </ListGroupItem>
-            </ListGroup>
-          </Card>
-        </CardContainer>
-      ))}
-    </Container>
+            {playerInfo.first_name} {playerInfo.last_name}
+          </Card.Title>
+        </Card.Body>
+        <ListGroup className="list-group-flush">
+          <ListGroupItem style={listStyle}>
+            Team : {playerInfo.team.full_name}
+          </ListGroupItem>
+          <ListGroupItem style={listStyle}>
+            Position : {playerInfo.position}
+          </ListGroupItem>
+          <ListGroupItem style={listStyle}>
+            Height : {playerInfo.height_feet}(ft)
+          </ListGroupItem>
+          <ListGroupItem style={listStyle}>
+            Weight : {playerInfo.weight_pounds}(lb)
+          </ListGroupItem>
+        </ListGroup>
+      </Card>
+    </CardContainer>
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  return { info: state };
-};
-export default connect(mapStateToProps)(PlayerInfo);
+export default PlayerInfo;
 
 const Img = styled.img`
   width: 250px;
   height: auto;
 `;
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-`;
-
 const CardContainer = styled.div`
-  height: 100%;
-  width: 500px;
+  /* height: 100%; */
+  /* width: 500px; */
+  /* top: 50;
+  left: 50; */
 `;
