@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
-// import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -108,6 +107,7 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
+  margin-bottom: 20px;
 `;
 const LogContainer = styled.div`
   display: flex;

@@ -5,6 +5,7 @@ import Divider from './Divider';
 import SeasonAverage from './SeasonAverage';
 import Navbar from './Navbar';
 import CurrentGameLog from './CurrentGameLog';
+import Chart from './Chart';
 const ShowDetail = ({ info }) => {
   return (
     <Container>
@@ -12,6 +13,8 @@ const ShowDetail = ({ info }) => {
         <Navbar />
 
         <SeasonAverage />
+        <Divider />
+        <Chart />
         <Divider />
         <CurrentGameLog />
       </div>

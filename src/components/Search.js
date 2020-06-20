@@ -135,6 +135,12 @@ const Search = ({ currentState, addToPlayer }) => {
           .sort((a, b) => new Date(b.game.date) - new Date(a.game.date))
           .slice(0, 10);
 
+        console.log(currentTen);
+        currentTen.map((current, index) => (current['index'] = index));
+
+        // .map((current, index) => current.push({ index }));
+        // .slice(0, 10);
+        console.log(currentTen);
         addToPlayer({
           playerInfo: playerinfo,
           playerAvg: playerAvg,

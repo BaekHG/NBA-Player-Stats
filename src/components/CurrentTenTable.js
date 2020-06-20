@@ -100,7 +100,6 @@ const useStyles = makeStyles({
 export default function CustomizedTables({ currentTen }) {
   const classes = useStyles();
   const rows = currentTen.map((current) => {
-    console.log(moment(current.game.date).format('MM-DD-YYYY'));
     return createData(
       moment(current.game.date).format('MM-DD-YYYY'),
       current.min,
