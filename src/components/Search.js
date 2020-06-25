@@ -11,22 +11,6 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-// const useStyles = makeStyles({
-//   container: {
-//     '& input:invalid + fieldset': {
-//       borderColor: 'red',
-//       borderWidth: 2,
-//     },
-//   },
-//   paper: {
-// position: 'absolute',
-// width: '700px',
-// maxHeight: 300,
-// overflow: 'scroll',
-// backgroundColor: '#212121',
-// color: '#E2E5E7',
-//   },
-// });
 
 const CssTextField = withStyles({
   root: {
@@ -138,13 +122,10 @@ const Search = ({ currentState, addToPlayer }) => {
         console.log(currentTen);
         currentTen.map((current, index) => (current['index'] = index));
 
-        // .map((current, index) => current.push({ index }));
-        // .slice(0, 10);
         console.log(currentTen);
         addToPlayer({
           playerInfo: playerinfo,
           playerAvg: playerAvg,
-          // playerGameLog: res.data.data,
           currentTen,
         });
       })
@@ -158,11 +139,12 @@ const Search = ({ currentState, addToPlayer }) => {
     getItemProps,
   }) => {
     if (state.playerinfo === undefined) return;
+    console.log(highlightedIndex);
     return state.playerinfo.map((player, index) => (
       <MenuItem
         {...getItemProps({ item: player })}
         key={player.id}
-        selected={highlightedIndex === index ? 'lightgray' : 'white'}
+        // selected={highlightedIndex === index ? 'lightgray' : 'white'}
         component="div"
         style={{
           fontWeight: 400,
@@ -216,6 +198,9 @@ const Search = ({ currentState, addToPlayer }) => {
                   overflow: 'scroll',
                   backgroundColor: '#212121',
                   color: '#E2E5E7',
+                  // '&:hover': {
+                  //   backgroundColor: 'white',
+                  // },
                 }}
                 square
               >
