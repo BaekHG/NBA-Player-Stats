@@ -44,7 +44,6 @@ const CssTextField = withStyles({
 })(TextField);
 
 const Search = ({ currentState, addToPlayer }) => {
-  // const classes = useStyles();
   const [text, setText] = useState('');
   const [state, setState] = useState({
     playerinfo: [],
@@ -87,11 +86,10 @@ const Search = ({ currentState, addToPlayer }) => {
 
         const playerAvg = res.data.data[0];
         if (playerAvg === undefined) {
-          alert(`This Player is eiterh injured or hasn't played yet`);
+          alert(`This Player is either injured or hasn't played yet`);
           return;
         }
         getGameLog(playerinfo, playerAvg, id);
-        // addToPlayer({ playerInfo: playerinfo, playerAvg: res.data.data[0] });
       })
       .catch((err) => {
         console.log(err);
@@ -104,8 +102,6 @@ const Search = ({ currentState, addToPlayer }) => {
         `https://www.balldontlie.io/api/v1/stats?player_ids[]=${id}&seasons[]=2019&per_page=100`
       )
       .then(async (res) => {
-        // const arr = res.data.data.map(data =>{
-        //filetr
         if (currentState.length >= 1) {
           const check = currentState.find(
             (info) => info.player.playerInfo.id === id
@@ -144,7 +140,6 @@ const Search = ({ currentState, addToPlayer }) => {
       <MenuItem
         {...getItemProps({ item: player })}
         key={player.id}
-        // selected={highlightedIndex === index ? 'lightgray' : 'white'}
         component="div"
         style={{
           fontWeight: 400,
@@ -198,9 +193,6 @@ const Search = ({ currentState, addToPlayer }) => {
                   overflow: 'scroll',
                   backgroundColor: '#212121',
                   color: '#E2E5E7',
-                  // '&:hover': {
-                  //   backgroundColor: 'white',
-                  // },
                 }}
                 square
               >

@@ -73,9 +73,4 @@ const Img = styled.img`
   height: auto;
 `;
 
-const CardContainer = styled.div`
-  /* height: 100%; */
-  /* width: 500px; */
-  /* top: 50;
-  left: 50; */
-`;
+const CardContainer = styled.div``;

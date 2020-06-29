@@ -46,7 +46,6 @@ const CustomTooltip = (props) => {
     );
   };
 
-  //   const data = payload[0].payload;
   return <Container>{payload.map((p) => renderPlayer(p))}</Container>;
 };
 

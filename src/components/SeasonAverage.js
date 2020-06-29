@@ -37,10 +37,8 @@ const SeasonAverage = ({ info }) => {
                   fontWeight: '200',
                   lineHeight: '1.33',
                 }}
-                // onClick={()=>renderModal(player.playerInfo)}
                 value={index}
                 onClick={renderModal}
-                // onClick={() => renderModal(index)}
               >
                 {player.player.playerInfo.first_name}{' '}
                 {player.player.playerInfo.last_name}

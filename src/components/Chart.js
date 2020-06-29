@@ -81,7 +81,6 @@ const Chart = ({ player }) => {
     );
   };
   const handleChange = (e) => {
-    // console.log(e.target.value);
     setFilter(e.target.value);
   };
   return (
