@@ -7,7 +7,7 @@ import { colors } from './theme';
 import PlayerInfo from './PlayerInfo';
 import Modal from '@material-ui/core/Modal';
 const SeasonAverage = ({ info }) => {
-  console.log('info');
+  console.log('hello world');
   const [open, setOpen] = useState({
     isOpen: false,
     i: 1,
