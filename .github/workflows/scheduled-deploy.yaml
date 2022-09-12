@@ -4,7 +4,7 @@ on:
   schedule:
     # 19:45, every Thursday, UTC
     # Friday 04:45 in Korea
-     - cron: "*/2 * * * *"
+     - cron: "*/5 * * * *"
 
 jobs:
   start:
