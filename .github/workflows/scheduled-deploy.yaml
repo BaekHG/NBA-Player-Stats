@@ -1,11 +1,6 @@
 name: GitHub Actions Demo
 
-on:
-  schedule:
-    # 19:45, every Thursday, UTC
-    # Friday 04:45 in Korea
-    - cron: 10 16 * * *
-  workflow_dispatch:
+on: [push]
 
 jobs:
   start:
