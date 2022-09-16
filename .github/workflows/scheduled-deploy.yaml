@@ -38,7 +38,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: 'refs/heads/development',
-              base: 'beta',
+              base: 'master',
               title: 'Regular deployment'
             }).catch(errorResponse => errorResponse);
 
