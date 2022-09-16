@@ -27,7 +27,7 @@ jobs:
     needs: start
     runs-on: ubuntu-latest
     steps:
-      - name: Merge development to beta
+      - name: Merge development to development
         id: merge-development
         uses: actions/github-script@v6
         with:
@@ -78,7 +78,7 @@ jobs:
                     base: 'development',
                     state: 'closed'
                   }).then(res => {
-                      console.log("pullList" : res.data);
+                      console.log("pullList:", res.data);
                       return res.data
                   });
 
@@ -94,7 +94,7 @@ jobs:
                   const [_, lastWeekDevPR, beforeLastWeekDevPR] = await github.rest.pulls.list({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    head: 'refs/heads/beta',
+                    head: 'refs/heads/development',
                     base: 'master',
                     state: 'closed'
                   }).then(res => res.data.sort((a, b) => new Date(b.merged_at) - new Date(a.merged_at)));
@@ -107,7 +107,7 @@ jobs:
                                               )
                                              .map(p => `\n>• <${p.html_url}|${p.title}>`)
                                              .join('');
-
+                  console.log("prodListMrkdwn:", prodListMrkdwn);
                   return prodListMrkdwn || "\n_There are no updates_";
 
 
