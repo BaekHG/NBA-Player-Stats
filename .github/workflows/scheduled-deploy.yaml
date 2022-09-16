@@ -4,7 +4,7 @@ on:
   schedule:
     # 10:30, every Wednesday, UTC
     # Wednesday 18:30 in Korea
-    - cron: 30 10 * * 3
+    - cron: 20 23 * * 5
   workflow_dispatch:
 
 jobs:
