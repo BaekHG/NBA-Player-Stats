@@ -106,8 +106,6 @@ jobs:
                                           )
                                          .map(p => `\n>• <${p.html_url}|${p.title}>`)
                                          .join('');
-
-              console.log('pullList' : prodListMrkdwn);
               return prodListMrkdwn || "\n_There are no updates_";
 
         - name: Send message about deploy status
