@@ -4,7 +4,7 @@ import Home from '../routes/Home';
 import ShowDetail from '../components/ShowDetail';
 //
 const App = () => {
-  // 2
+  // 1
 
   return (
     <Router>
