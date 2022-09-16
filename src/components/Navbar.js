@@ -50,8 +50,7 @@ const Navbar = ({ playerInfo, DeletePlayer, DeleteAllPlayer }) => {
         />
       );
   };
-
-  // const classes = useStyles();
+  
   return (
     <Container>
       <ContentContainer>
