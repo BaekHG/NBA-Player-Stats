@@ -24,11 +24,13 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
-  merge-branch:
+  prepare-prod:
     needs: start
     runs-on: ubuntu-latest
+    outputs:
+          status: ${{ steps.merge-beta.outputs.result }}
     steps:
-      - name: Merge development to beta
+      - name: Merge development to master
         id: merge-development
         uses: actions/github-script@v6
         with:
