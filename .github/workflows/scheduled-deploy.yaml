@@ -65,7 +65,6 @@ jobs:
           - name: Merge development to beta
             id: merge-development
             uses: actions/github-script@v6
-            uses: devmasx/merge-branch@master
             with:
               github-token: ${{ secrets.GITHUB_TOKEN }}
               result-encoding: string
