@@ -78,7 +78,7 @@ jobs:
                     base: 'development',
                     state: 'closed'
                   }).then(res => {
-                      console.log("pullList" : res.data);
+                      console.log("pullList:", res.data);
                       return res.data
                   });
 
@@ -107,7 +107,7 @@ jobs:
                                               )
                                              .map(p => `\n>• <${p.html_url}|${p.title}>`)
                                              .join('');
-
+                  console.log("prodListMrkdwn:", prodListMrkdwn);
                   return prodListMrkdwn || "\n_There are no updates_";
 
 
