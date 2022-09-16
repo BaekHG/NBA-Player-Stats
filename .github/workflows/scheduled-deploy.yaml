@@ -37,8 +37,8 @@ jobs:
             const response = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: 'refs/heads/development',
-              base: 'master',
+              head: 'refs/heads/master',
+              base: 'development',
               title: 'Regular deployment'
             }).catch(errorResponse => errorResponse);
 
