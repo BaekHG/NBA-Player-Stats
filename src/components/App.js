@@ -4,7 +4,8 @@ import Home from '../routes/Home';
 import ShowDetail from '../components/ShowDetail';
 //
 const App = () => {
-  // test test
+  // test 2
+
   return (
     <Router>
       <Route path="/" exact={true} component={Home}></Route>
