@@ -78,7 +78,7 @@ jobs:
                     base: 'development',
                     state: 'closed'
                   }).then(res => {
-                      console.log(res.data)
+                      console.log("pullList" : res.data);
                       return res.data
                   });
 
