@@ -79,7 +79,7 @@ jobs:
                 state: 'closed'
               }).then(res => res.data);
 
-              console.log("pullList" : pullList)
+              console.log("pullList" : pullList);
               const _MS_PER_DAY = 1000 * 60 * 60 * 24;
               const dateDiffInDays = (a, b) => {
                 const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
@@ -97,6 +97,7 @@ jobs:
                 state: 'closed'
               }).then(res => res.data.sort((a, b) => new Date(b.merged_at) - new Date(a.merged_at)));
 
+
               const prodListMrkdwn = pullList
                                         .filter(
                                           p =>
@@ -105,7 +106,8 @@ jobs:
                                           )
                                          .map(p => `\n>• <${p.html_url}|${p.title}>`)
                                          .join('');
-              console.log("prodListMrkdwn" : prodListMrkdwn)
+
+              console.log('pullList' : prodListMrkdwn);
               return prodListMrkdwn || "\n_There are no updates_";
 
         - name: Send message about deploy status
