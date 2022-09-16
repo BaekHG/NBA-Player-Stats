@@ -2,8 +2,7 @@ name: GitHub Actions Demo
 
 on:
   schedule:
-    # 10:30, every Wednesday, UTC
-    ####
+    #### 10:30, every Wednesday, UTC
     - cron: 30 10 * * 3
   workflow_dispatch:
 
@@ -24,13 +23,11 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
-  prepare-prod:
+  test-prepare:
     needs: start
     runs-on: ubuntu-latest
-    outputs:
-          status: ${{ steps.merge-beta.outputs.result }}
     steps:
-      - name: Merge development to master
+      - name: Merge development to beta
         id: merge-development
         uses: actions/github-script@v6
         with:
@@ -40,8 +37,8 @@ jobs:
             const response = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: 'refs/heads/master',
-              base: 'development',
+              head: 'refs/heads/development',
+              base: 'master',
               title: 'Regular deployment'
             }).catch(errorResponse => errorResponse);
 
