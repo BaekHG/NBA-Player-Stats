@@ -23,7 +23,7 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
-  merge-branch:
+  test-prepare:
     needs: start
     runs-on: ubuntu-latest
     steps:
@@ -37,8 +37,8 @@ jobs:
             const response = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: 'refs/heads/master',
-              base: 'development',
+              head: 'refs/heads/development',
+              base: 'master',
               title: 'Regular deployment'
             }).catch(errorResponse => errorResponse);
 
