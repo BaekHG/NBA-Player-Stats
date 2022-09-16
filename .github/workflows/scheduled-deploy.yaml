@@ -56,84 +56,84 @@ jobs:
             console.log("status:", response.status);
             return response.status;
 
-    notify-deployed-states:
-        name: notify
-        needs: [prepare-prod]
-        if: ${{ always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
-        runs-on: ubuntu-20.04
-        steps:
-          - name: Set node.js version
-            uses: actions/setup-node@v2
-            with:
-              node-version: '14'
-          - name: Get Prod PR lists
-            id: get_prod_pr_list
-            uses: actions/github-script@v6
-            with:
-              github-token: ${{ secrets.GITHUB_TOKEN }}
-              script: |
-                const pullList = await github.rest.pulls.list({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  base: 'development',
-                  state: 'closed'
-                }).then(res => {
-                    console.log(res.data)
-                    return res.data
-                });
+  notify-deployed-states:
+          name: notify
+          needs: [prepare-prod]
+          if: ${{ always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
+          runs-on: ubuntu-20.04
+          steps:
+            - name: Set node.js version
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+            - name: Get Prod PR lists
+              id: get_prod_pr_list
+              uses: actions/github-script@v6
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                  const pullList = await github.rest.pulls.list({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    base: 'development',
+                    state: 'closed'
+                  }).then(res => {
+                      console.log(res.data)
+                      return res.data
+                  });
 
-                const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-                const dateDiffInDays = (a, b) => {
-                  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-                  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+                  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                  const dateDiffInDays = (a, b) => {
+                    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-                  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-                };
-                const today = new Date();
+                    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+                  };
+                  const today = new Date();
 
-                const [_, lastWeekDevPR, beforeLastWeekDevPR] = await github.rest.pulls.list({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  head: 'refs/heads/beta',
-                  base: 'master',
-                  state: 'closed'
-                }).then(res => res.data.sort((a, b) => new Date(b.merged_at) - new Date(a.merged_at)));
+                  const [_, lastWeekDevPR, beforeLastWeekDevPR] = await github.rest.pulls.list({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    head: 'refs/heads/beta',
+                    base: 'master',
+                    state: 'closed'
+                  }).then(res => res.data.sort((a, b) => new Date(b.merged_at) - new Date(a.merged_at)));
 
-                const prodListMrkdwn = pullList
-                                          .filter(
-                                            p =>
-                                            new Date(lastWeekDevPR.merged_at) > new Date(p.merged_at) &&
-                                            new Date(beforeLastWeekDevPR.merged_at) <= new Date(p.merged_at)
-                                            )
-                                           .map(p => `\n>• <${p.html_url}|${p.title}>`)
-                                           .join('');
+                  const prodListMrkdwn = pullList
+                                            .filter(
+                                              p =>
+                                              new Date(lastWeekDevPR.merged_at) > new Date(p.merged_at) &&
+                                              new Date(beforeLastWeekDevPR.merged_at) <= new Date(p.merged_at)
+                                              )
+                                             .map(p => `\n>• <${p.html_url}|${p.title}>`)
+                                             .join('');
 
-                return prodListMrkdwn || "\n_There are no updates_";
+                  return prodListMrkdwn || "\n_There are no updates_";
 
 
-          - name: Send message about deploy status
-            if: always()
-            uses: 8398a7/action-slack@v3
-            with:
-              status: custom
-              custom_payload: |
-                  {
-                    blocks: [
-                      {
-                        "type": "header",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "Production Released"
+            - name: Send message about deploy status
+              if: always()
+              uses: 8398a7/action-slack@v3
+              with:
+                status: custom
+                custom_payload: |
+                    {
+                      blocks: [
+                        {
+                          "type": "header",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "Production Released"
+                          }
+                        },
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
+                            "text": "*Changes*" + ${{ steps.get_prod_pr_list.outputs.result }}
+                          }
                         }
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
-                          "text": "*Changes*" + ${{ steps.get_prod_pr_list.outputs.result }}
-                        }
-                      }
-                    ]
-                  }
-            env:
-              SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                      ]
+                    }
+              env:
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
