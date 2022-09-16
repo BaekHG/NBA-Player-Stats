@@ -2,47 +2,10 @@ name: GitHub Actions Demo
 
 on:
   schedule:
-    # 19:45, every Thursday, UTC
-    # Friday 04:45 in Korea
-     - cron: "*/5 * * * *"
+    # 10:30, every Wednesday, UTC
+    - cron: 30 10 * * 3
   workflow_dispatch:
 
-# prepare-beta:
-#     needs: [ deploy-prod, skip-prod ]
-#     if: ${{ always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
-#     name: Prepare beta deployment
-#     runs-on: ubuntu-20.04
-#     outputs:
-#       status: ${{ steps.merge-development.outputs.result }}
-#     steps:
-#       - name: Merge development to beta
-#         id: merge-development
-#         uses: actions/github-script@v6
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-#           result-encoding: string
-#           script: |
-#             const response = await github.rest.pulls.create({
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               head: 'refs/heads/development',
-#               base: 'beta',
-#               title: 'Regular deployment'
-#             }).catch(errorResponse => errorResponse);
-#
-#             if (response.status >= 400) {
-#               console.log("status:", response.status);
-#               return response.status;
-#             }
-#
-#             await github.rest.pulls.merge({
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               pull_number: response.data.number
-#             });
-#
-#             console.log("status:", response.status);
-#             return response.status;
 jobs:
   start:
     runs-on: ubuntu-20.04
@@ -92,21 +55,3 @@ jobs:
 
             console.log("status:", response.status);
             return response.status;
-
-# name: Merge any release branch to uat
-# on:
-#   push:
-#     branches:
-#       - 'release/*'
-# jobs:
-#   merge-branch:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@master
-#
-#       - name: Merge staging -> uat
-#         uses: devmasx/merge-branch@master
-#         with:
-#           type: now
-#           target_branch: uat
-#           github_token: ${{ github.token }}
