@@ -82,15 +82,6 @@ jobs:
                       return res.data
                   });
 
-                  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-                  const dateDiffInDays = (a, b) => {
-                    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-                    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-                    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-                  };
-                  const today = new Date();
-
                   const [_, lastWeekDevPR, beforeLastWeekDevPR] = await github.rest.pulls.list({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -99,6 +90,10 @@ jobs:
                     state: 'closed'
                   }).then(res => res.data.sort((a, b) => new Date(b.merged_at) - new Date(a.merged_at)));
 
+
+                  console.log('pullList: ', pullList);
+                  console.log('lastWeekDevPR : ', lastWeekDevPR);
+                  console.log('beforeLastWeekDevPR : ', beforeLastWeekDevPR);
                   const prodListMrkdwn = pullList
                                             .filter(
                                               p =>
